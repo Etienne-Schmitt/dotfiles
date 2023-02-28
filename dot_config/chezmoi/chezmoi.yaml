@@ -1,0 +1,9 @@
+format: yaml
+progress: true
+
+edit:
+  command: nvim
+diff:
+  command: nvim
+  args:
+    - '-d'
