@@ -1,1 +1,93 @@
-function.zsh.tmpl
+# vim: syntax=sh shiftwidth=4 tabstop=8 softtabstop=0 smarttab expandtab
+
+COLOR_BLANK=$(tput sgr0)
+COLOR_ERROR=$(tput setaf 1)
+COLOR_GREEN=$(tput setaf 2)
+
+# stan <level 0-9> <things to scan>
+stan() {
+  if [ -z "$1" ] || \
+     ! [ "$1" -eq "$1" ] 2> /dev/null || \
+     [ "$1" -lt 0 ] || \
+     [ "$1" -gt 9 ] || \
+     [ -z "$2" ];then
+        printf '%s%s%s\n' "$COLOR_ERROR" "Usage: stan <level> <things to scan>" "$COLOR_BLANK"
+        printf '%s%s%s\n' "$COLOR_ERROR" "Leaving..." "$COLOR_BLANK"
+        return 1
+  fi
+  phpstan analyze --memory-limit=
+    {{- if eq .chezmoi.hostname "LAPTOP-CB-ETI" -}}
+      4g
+    {{- else if (or (eq .chezmoi.hostname "DESKTOP-ETIENNE") (eq .chezmoi.hostname "MacBook-Pro-16-2021")) -}}
+      8g
+    {{- end }} --level="$1" "$2"
+}
+
+{{- if eq .chezmoi.os "macos" -}}
+
+# sleepin <duration>
+function sleepin() {
+    if [ -z "$1" ]; then
+        printf '%s%s%s\n' "$COLOR_ERROR" "Please provide a timestamp." "$COLOR_BLANK"
+        printf '%s%s%s\n' "$COLOR_ERROR" "Leaving..." "$COLOR_BLANK"
+
+        return 1
+    fi
+
+    #TODO checktimestamp format
+    #TODO Add return message showing success
+
+    gsleep "$1"; osascript -e 'tell application "System Events" to sleep'
+}
+
+# todo <title> [date] [time]
+function todo() {
+    if  [ -z "$1" ]; then
+        printf '%s%s%s\n' "$COLOR_ERROR" "Error: No title specified!" "$COLOR_BLANK"
+        printf '%s%s%s\n' "$COLOR_ERROR" "Please provide a title for the reminder." "$COLOR_BLANK"
+        printf '%s%s%s\n' "$COLOR_ERROR" "Leaving..." "$COLOR_BLANK"
+
+        return 1
+    fi
+
+    if [ -n "$2" ] && [ -n "$3" ]
+    then
+        osascript - "$1" "$2" "$3" <<END
+on run argv
+    set stringedAll to date (item 2 of argv & " " & item 3 of argv)
+    tell application "Reminders"
+        tell list "Choses à faire"
+            make new reminder with properties {name:item 1 of argv, due date:stringedAll}
+        end tell
+    end tell
+end run
+END
+    else
+        osascript - "$1" <<END
+on run a
+    tell app "Reminders"
+        tell list "Choses à faire"
+            make new reminder with properties {name:item 1 of a}
+        end tell
+    end tell
+end run
+END
+    fi
+
+    printf '%s%s%s\n' "$COLOR_GREEN" "TODO added!" "$COLOR_BLANK"
+}
+
+# ds <query>
+function ds() {
+    if  [ -z "$1" ]; then
+        printf '%s%s%s\n' "$COLOR_ERROR" "Error: No query specified!" "$COLOR_BLANK"
+        printf '%s%s%s\n' "$COLOR_ERROR" "Leaving..." "$COLOR_BLANK"
+
+        return 1
+    fi
+
+    PERCENT_ENCODED_QUERY=$(urlencode "$1")
+    open dash://"$PERCENT_ENCODED_QUERY"
+}
+
+{{ end }}
