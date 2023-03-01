@@ -3,8 +3,13 @@
 [core]
     autocrlf = false
     editor = nvim
+{{- if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) }}
+    sshCommand = /mnt/c/Windows/System32/OpenSSH/ssh.exe
+{{- end }}
+{{- if ne .chezmoi.hostname "LAPTOP-CB-ETI" }}
 [init]
     defaultBranch = main
+{{- end }}
 [diff]
     tool = nvim
 [difftool]
@@ -17,13 +22,13 @@
     instructionFormat = %s
 [user]
     name = Etienne Schmitt
-{{- if (or (eq .chezmoi.hostname "DESKTOP-ETIENNE") (eq .chezmoi.hostname "MacBook-Pro-16-2021")) }}
+{{- if ne .chezmoi.hostname "LAPTOP-CB-ETI" }}
     email = etienne@schmitt-etienne.fr
     signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHSwAiuqFA4ekqtCFlLsxMuzu7LpPpLm6xstbmWt9y4+
 {{- else }}
     email = etienne.schmitt@centerboard.ch
 {{- end }}
-{{- if (or (eq .chezmoi.hostname "DESKTOP-ETIENNE") (eq .chezmoi.hostname "MacBook-Pro-16-2021")) }}
+{{- if ne .chezmoi.hostname "LAPTOP-CB-ETI" }}
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
@@ -35,7 +40,9 @@
 {{- if eq .chezmoi.os "darwin" }}
     program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 {{- else if .chezmoi.od "linux" }}
-#TODO
+
+    #TODO
+
 {{- end }}
 [commit]
     gpgsign = true
