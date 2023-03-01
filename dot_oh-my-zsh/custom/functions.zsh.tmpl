@@ -22,8 +22,7 @@ stan() {
       8g
     {{- end }} --level="$1" "$2"
 }
-
-{{- if eq .chezmoi.os "macos" -}}
+{{- if eq .chezmoi.os "darwin" }}
 
 # sleepin <duration>
 function sleepin() {
@@ -89,5 +88,5 @@ function ds() {
     PERCENT_ENCODED_QUERY=$(urlencode "$1")
     open dash://"$PERCENT_ENCODED_QUERY"
 }
+{{- end }}
 
-{{ end }}
