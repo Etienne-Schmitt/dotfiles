@@ -3,17 +3,52 @@
 # Custom command
 alias fjson='python3 -m json.tool'
 alias dstan='docker run -itv $PWD:/app --rm ghcr.io/phpstan/phpstan:latest-php8.2'
-alias lsop='sudo lsof -nP +c 15 | grep LISTEN --color=never'
+alias urlencode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1], \"\"))"'
+alias urldecode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1]))"'
+
+{{- if eq .chezmoi.os "linux" -}}
+alias lsop='ss -ltu'
+alias cdinclude="cd /usr/include"
+{{- else if eq .chezmoi.os "darwin" }}
+alias lsop="lsof -nP +c 15 | grep LISTEN --color=never | awk '{ print \$1, \$2, \$3, \$9, \$8, \$5}' | column -t"
+alias cdinclude="cd /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include"
+alias mac-restart-audio="sudo pkill -9 coreaudiod"
+alias ApplePressAndHoldOn="defaults write -g ApplePressAndHoldEnabled 1"
+alias ApplePressAndHoldOff="defaults write -g ApplePressAndHoldEnabled 0"
+{{- end }}
 
 # Shortcut
 alias k='kubectl'
 alias h='helm'
 alias kns='kubectl config set-context --current -n'
-
 alias tt='tree -dL 2'
 alias ttt='tree -dL 3'
 alias tttt='tree -dL 4'
+alias cm='chezmoi'
 
 # Replacing shortcut
-alias vim="nvim"
 alias rgrep="rgrep -n"
+alias curl="noglob curl"
+alias vi="nvim"
+alias vim="nvim"
+alias vimdiff="nvim -d"
+
+{{- if eq .chezmoi.os "darwin" }}
+alias tar="COPYFILE_DISABLE=1 tar"
+{{- end }}
+
+################
+### Specific ###
+################
+{{ if eq .chezmoi.os "darwin" }}
+# Benchmark disks alias
+alias dbr="head -c 1073741824 </dev/urandom > benchRead.tmp; sync; gdd if=benchRead.tmp of=/dev/null bs=8k; rm benchRead.tmp"
+alias dbw="gdd if=/dev/zero of=benchWrite.tmp bs=1G count=1 oflag=dsync; rm benchWrite.tmp"
+alias dbl="gdd if=/dev/zero of=benchLatency.tmp bs=512 count=1000 oflag=dsync; rm benchLatency.tmp"
+{{- else if eq .chezmoi.os "linux" }}
+alias dbr="head -c 1073741824 </dev/urandom > benchRead.tmp; sync; dd if=benchRead.tmp of=/dev/null bs=8k; rm benchRead.tmp"
+alias dbw="dd if=/dev/zero of=benchWrite.tmp bs=1G count=1 oflag=dsync; rm benchWrite.tmp"
+alias dbl="dd if=/dev/zero of=benchLatency.tmp bs=512 count=1000 oflag=dsync; rm benchLatency.tmp"
+{{- end }}
+alias dball="dbr; dbw; dbl"
+
