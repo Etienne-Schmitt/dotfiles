@@ -4,26 +4,24 @@ COLOR_BLANK=$(tput sgr0)
 COLOR_ERROR=$(tput setaf 1)
 COLOR_GREEN=$(tput setaf 2)
 
-# stan <level 0-9> <things to scan>
+# stan <level 0-9> <folder to scan>
 stan() {
   if [ -z "$1" ] || \
      ! [ "$1" -eq "$1" ] 2> /dev/null || \
      [ "$1" -lt 0 ] || \
      [ "$1" -gt 9 ] || \
      [ -z "$2" ];then
-        printf '%s%s%s\n' "$COLOR_ERROR" "Usage: stan <level> <things to scan>" "$COLOR_BLANK"
+        printf '%s%s%s\n' "$COLOR_ERROR" "Usage: stan <level 0-9> <folder to scan>" "$COLOR_BLANK"
         printf '%s%s%s\n' "$COLOR_ERROR" "Leaving..." "$COLOR_BLANK"
         return 1
   fi
-  phpstan analyze --memory-limit=
-    {{- if eq .chezmoi.hostname "LAPTOP-CB-ETI" -}}
-      4g
-    {{- else if (or (eq .chezmoi.hostname "DESKTOP-ETIENNE") (eq .chezmoi.hostname "MacBook-Pro-16-2021")) -}}
-      8g
-    {{- end }} --level="$1" "$2"
+    {{- if eq .chezmoi.hostname "LAPTOP-CB-ETI" }}
+    phpstan analyze --memory-limit=4g --level="$1" -- "$2"
+    {{- else if (or (eq .chezmoi.hostname "DESKTOP-ETIENNE") (eq .chezmoi.hostname "MacBook-Pro-16-2021")) }}
+    phpstan analyze --memory-limit=8g --level="$1" -- "$2"
+    {{ end }}
 }
-{{- if eq .chezmoi.os "darwin" }}
-
+{{ if eq .chezmoi.os "darwin" -}}
 # sleepin <duration>
 function sleepin() {
     if [ -z "$1" ]; then
@@ -89,4 +87,39 @@ function ds() {
     open dash://"$PERCENT_ENCODED_QUERY"
 }
 {{- end }}
+
+{{- if eq .chezmoi.hostname "LAPTOP-CB-ETI" }}
+# swagger()
+swagger() {
+  PATH_TO_GO="schulnetz/phpfiles/Rest/v1/spec"
+  PATH_ORIGIN=$(pwd)
+  DELETE_ME=("ActionResponse" "Error" "Setting" "Translation" "File" "Picture")
+
+  if ! [ -d "$PATH_TO_GO" ]; then
+    echo "Path : \"schulnetz/phpfiles/Rest/v1/spec\" not found..."
+    return 1
+  fi
+  cd "$PATH_TO_GO" || return 1
+
+  swagger-merger -i sn-api.yaml -o swagger.yaml
+  docker run --user "$(id -u)":"$(id -g)" --rm -v "$(pwd)":/local swaggerapi/swagger-codegen-cli generate -l php -t /local/swagger-codegen-templates -i /local/swagger.yaml -o /local/tmp -Dmodels > /dev/null 2>&1
+
+  for i in $DELETE_ME; do
+    rm --force --verbose -- tmp/SwaggerClient-php/lib/Model/"$i".php
+  done
+
+  cp tmp/SwaggerClient-php/lib/Model/* ../Models
+  rm --force --recursive -- tmp/
+
+  cd "$PATH_ORIGIN" || return 1
+}
+{{ end }}
+
+{{- if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft" )) }}
+phpstorm() {
+    EXEC_PATH=$(tail -n 1 $(which phpstorm.cmd) | awk {' print $4 '} | sed -e 's#\\#/#g; s#C:#/mnt/c#g')
+
+    "$EXEC_PATH" "$@"
+}
+{{ end -}}
 
