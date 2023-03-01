@@ -65,8 +65,6 @@
     kubecontext             # current kubernetes context (https://kubernetes.io/)
     {{- if eq .chezmoi.hostname "LAPTOP-CB-ETI" }}
     azure                   # azure account name (https://docs.microsoft.com/en-us/cli/azure)
-    {{- else }}
-    # azure                 # azure account name (https://docs.microsoft.com/en-us/cli/azure)
     {{- end }}
     context                 # user@hostname
     vim_shell               # vim shell indicator (:sh)
