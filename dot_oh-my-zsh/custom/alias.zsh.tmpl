@@ -6,7 +6,7 @@ alias dstan='docker run -itv $PWD:/app --rm ghcr.io/phpstan/phpstan:latest-php8.
 alias urlencode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1], \"\"))"'
 alias urldecode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1]))"'
 
-{{- if eq .chezmoi.os "linux" -}}
+{{- if eq .chezmoi.os "linux" }}
 alias lsop='ss -ltu'
 alias cdinclude="cd /usr/include"
 {{- else if eq .chezmoi.os "darwin" }}
