@@ -19,8 +19,9 @@ stan() {
     phpstan analyze --memory-limit=4g --level="$1" -- "$2"
     {{- else if (or (eq .chezmoi.hostname "DESKTOP-ETIENNE") (eq .chezmoi.hostname "MacBook-Pro-16-2021")) }}
     phpstan analyze --memory-limit=8g --level="$1" -- "$2"
-    {{ end }}
+    {{- end }}
 }
+
 {{ if eq .chezmoi.os "darwin" -}}
 # sleepin <duration>
 function sleepin() {
