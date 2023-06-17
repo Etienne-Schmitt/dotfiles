@@ -5,6 +5,7 @@ alias fjson='python3 -m json.tool'
 alias dstan='docker run -itv $PWD:/app --rm ghcr.io/phpstan/phpstan:latest-php8.2'
 alias urlencode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read()[0:-1], \"\"))"'
 alias urldecode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1]))"'
+alias p10kupgrade='git -C ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k pull'
 
 {{- if eq .chezmoi.os "linux" }}
 alias lsop='ss -ltu'
