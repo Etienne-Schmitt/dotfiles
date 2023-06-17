@@ -38,6 +38,8 @@ alias vimdiff="nvim -d"
 alias tar="COPYFILE_DISABLE=1 tar"
 {{- else if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) }}
 alias ssh='/mnt/c/Windows/System32/OpenSSH/ssh.exe'
+alias wssh='ssh'
+alias lssh='/bin/ssh'
 {{- end }}
 
 ################
