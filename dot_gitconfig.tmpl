@@ -34,15 +34,11 @@
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
     required = true
+{{- if eq .chezmoi.os "darwin" }}
 [gpg]
     format = ssh
 [gpg "ssh"]
-{{- if eq .chezmoi.os "darwin" }}
     program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
-{{- else if .chezmoi.od "linux" }}
-
-    #TODO
-
 {{- end }}
 [commit]
     gpgsign = true
