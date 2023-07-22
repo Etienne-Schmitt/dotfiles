@@ -1,0 +1,49 @@
+HashKnownHosts yes
+
+Host vps-DebMail
+  Hostname 54.37.226.39
+  Port 1428
+  IdentityFile ~/.ssh/id_ed25519
+
+Host to-server
+  Hostname 163.172.251.177
+  Port 4444
+  IdentityFile ~/.ssh/id_ed25519
+
+Host to-server-root
+  Hostname 163.172.251.177
+  User root
+  Port 4444
+  IdentityFile ~/.ssh/root/id_to-server_ed25519
+
+Host rpi
+  Hostname rpi.syrgoma.com
+  Port 1428
+  IdentityFile ~/.ssh/id_ed25519
+
+Host keke
+  Hostname admin.kelyan.fr
+  Port 22
+  IdentityFile ~/.ssh/id_ed25519
+
+Host github.com
+  MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512
+
+Host unraid
+  Hostname 192.168.1.250
+  Port 1428
+  User root
+
+Host *
+  {{- if eq .chezmoi.os "darwin" }}
+  IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+  {{- end }}
+  ConnectTimeout 30
+  User syrgoma
+  KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+  MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
+  Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+  ServerAliveInterval 10
+  ControlMaster auto
+  ControlPersist yes
+  ControlPath ~/.ssh/socket-%r@%h:%p
