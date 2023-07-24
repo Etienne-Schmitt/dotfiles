@@ -3,28 +3,27 @@ HashKnownHosts yes
 Host vps-DebMail
   Hostname 54.37.226.39
   Port 1428
-  IdentityFile ~/.ssh/id_ed25519
 
 Host to-server
   Hostname 163.172.251.177
   Port 4444
-  IdentityFile ~/.ssh/id_ed25519
+
+Host to-server-new
+  Hostname 51.15.18.84
+  Port 444
 
 Host to-server-root
   Hostname 163.172.251.177
   User root
   Port 4444
-  IdentityFile ~/.ssh/root/id_to-server_ed25519
 
 Host rpi
   Hostname rpi.syrgoma.com
   Port 1428
-  IdentityFile ~/.ssh/id_ed25519
 
 Host keke
   Hostname admin.kelyan.fr
   Port 22
-  IdentityFile ~/.ssh/id_ed25519
 
 Host github.com
   MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512
