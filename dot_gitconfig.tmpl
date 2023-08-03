@@ -10,6 +10,11 @@
 [init]
     defaultBranch = main
 {{- end }}
+{{- if eq .chezmoi.fqdnHostname "mail.touhou-online.net" }}
+[safe]
+    directory = /data
+    directory = /data/email
+{{- end }}
 [diff]
     tool = nvim
 [difftool]
