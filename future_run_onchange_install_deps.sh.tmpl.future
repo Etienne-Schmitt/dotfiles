@@ -1,0 +1,8 @@
+#!/bin/sh
+
+{{- if eq .chezmoi.os "darwin"" }}
+brew install chezmoi composer cppman curl fdupes fzf git gitap -lfs coreutils gnu-sed gnu-tar gnu-time gnu-which htop knock kubernetes-cli less make ncdu neovim nmap php pigz rclone rsync rust shellcheck tree vim watch wget zsh zsh-completions
+
+brew install --cask 1password 1password-cli android-platform-tools brave-browser cleanmymac cmake dash discord docker font-jetbrains-mono-nerd-font jetbrains-toolbox launchpad-manager lulu mountain-duck nextcloud parsec paw rectangle vlc wineskin vlc plex iina logitech-g-hub via mas
+
+mas install 1569813296 497799835 634159523 424389933 1295203466 409183694 434290957 1451685025 409201541 634148309 424390742 409203825
