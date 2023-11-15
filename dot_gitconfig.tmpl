@@ -3,8 +3,8 @@
 [core]
     autocrlf = false
     editor = nvim
-{{- if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) }}
-    sshCommand = /mnt/c/Windows/System32/OpenSSH/ssh.exe
+{{- if eq .chezmoi.hostname "LAPTOP-CB-ETI" }}
+    sshCommand = ssh -i ~/.ssh/bitbucket_centerboard_rsa
 {{- end }}
 {{- if ne .chezmoi.hostname "LAPTOP-CB-ETI" }}
 [init]
