@@ -1,23 +1,72 @@
-"""
-""" Vim/NVim configuration
-"""
+""""""""""""""""""""""""""""""""""
+""""" Vim/NVim configuration """""
+""""""""""""""""""""""""""""""""""
+
+""" Preparation
+
+" Load default config in vim
 if !has('nvim')
     "" Import default vim config
-    "" $VIMTUNTIME is used for not having to change in future update
     source $VIMRUNTIME/defaults.vim
-
-    "" Replaced default vim config
-
 endif
 
-"" New configs
+
+" Auto install Plug
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+
+" Install plugin
+call plug#begin(data_dir . '/plugged')
+
+" Install plugin in lazy load
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle', 'as': 'NERDTree' }
+Plug 'vim-airline/vim-airline'
+call plug#end()
+
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
+
+""" Config
+
+" Encoding
+set encoding=utf-8      " Set vim/nvim internal encoding
+
 
 " Tabulation config
-set tabstop=4       " The width of a TAB is set to 4
-set shiftwidth=4    " Indents will have a width of 4
-set softtabstop=4   " Sets the number of columns for a TAB
-set expandtab       " Expand TABs to spaces
+set tabstop=4           " The width of a TAB is set to 4
+set shiftwidth=4        " Indents will have a width of 4
+set softtabstop=4       " Sets the number of columns for a TAB
+set expandtab           " Expand TABs to spaces
+
 
 " Show things
-set hlsearch        " highlight search
+set hlsearch            " Highlight search
+set incsearch           " Show all 
+set ruler               " Show ruler
+set showmatch           " Show matched word in search
+set relativenumber      " Show line number relative to current
+
+
+" Set Swap directory
+set directory=~/.local/share/vim/swap//
+
+
+" Skin
+set guicursor=n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20     " Change cursor
+set visualbell                                              " Disable sound and show only a visual bell
+
+
+" NerdTREE
+let NERDTreeWinSize=35
+
+
+" Key mapping
+map <A-n> :NERDTreeToggle<CR>
 
