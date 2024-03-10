@@ -54,9 +54,10 @@ set ruler               " Show ruler
 set showmatch           " Show matched word in search
 set relativenumber      " Show line number relative to current
 
+" Safety
+set directory=~/.local/share/vim/swap//		" Save swap at location ~/.local/share/vim/swap/{LOCATION_ON_FS}
+set nobackup					" Disable backup file creation
 
-" Set Swap directory
-set directory=~/.local/share/vim/swap//
 
 
 " Skin
