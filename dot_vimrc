@@ -38,6 +38,9 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 " Encoding
 set encoding=utf-8      " Set vim/nvim internal encoding
 
+" Modelines
+set modeline		" Enable modelines
+set modelines=5		" Search for modelines in 5 first lines
 
 " Tabulation config
 set tabstop=4           " The width of a TAB is set to 4
