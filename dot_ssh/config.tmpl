@@ -31,6 +31,8 @@ Host unraid
 Host *
   {{- if eq .chezmoi.os "darwin" }}
   IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+  {{- else if (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft") (not (eq .chezmoi.hostname "LAPTOP-CB-ETI"))) }}
+  IdentityFile ~/.ssh/Syrgoma_SSH_Key_1password
   {{- end }}
   ConnectTimeout 30
   User syrgoma
