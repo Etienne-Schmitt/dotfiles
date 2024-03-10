@@ -1,15 +1,15 @@
-""""""""""""""""""""""""""""""""""
-""""" Vim/NVim configuration """""
-""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""
+""""""""" Vim/NVim Configuration """""""""
+""""""""""""""""""""""""""""""""""""""""""
 
-""" Preparation
+"""""""""""""""""""""""""""""
+"""""""""" Plugins """"""""""
+"""""""""""""""""""""""""""""
 
-" Load default config in vim
+" Load default config for vim
 if !has('nvim')
-    "" Import default vim config
     source $VIMRUNTIME/defaults.vim
 endif
-
 
 " Auto install Plug
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
@@ -18,13 +18,12 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-
-" Install plugin
+" Install plugins
 call plug#begin(data_dir . '/plugged')
-
-" Install plugin in lazy load
-Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle', 'as': 'NERDTree' }
 Plug 'vim-airline/vim-airline'
+
+" Start Nerdtree in lazymode for quicker startup time
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle', 'as': 'NERDTree' }
 call plug#end()
 
 " Run PlugInstall if there are missing plugins
@@ -32,8 +31,9 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \| PlugInstall --sync | source $MYVIMRC
 \| endif
 
-
-""" Config
+""""""""""""""""""""""""""""""""""""
+"""""""""" Configurations """"""""""
+""""""""""""""""""""""""""""""""""""
 
 " Encoding
 set encoding=utf-8      " Set vim/nvim internal encoding
@@ -58,16 +58,12 @@ set relativenumber      " Show line number relative to current
 set directory=~/.local/share/vim/swap//		" Save swap at location ~/.local/share/vim/swap/{LOCATION_ON_FS}
 set nobackup					" Disable backup file creation
 
-
-
-" Skin
+" Visuals
 set guicursor=n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20     " Change cursor
 set visualbell                                              " Disable sound and show only a visual bell
 
-
-" NerdTREE
-let NERDTreeWinSize=35
-
+" NerdTREE Config
+let NERDTreeWinSize=35 		" Set length of NERDTree windows size
 
 " Key mapping
 map <A-n> :NERDTreeToggle<CR>
